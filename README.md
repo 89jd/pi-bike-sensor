@@ -11,4 +11,4 @@
 
 ## Circuit
 
-![alt text](https://ibb.co/DpDpGXh "Circuit
+![image info](https://i.imgur.com/xHFJliD.png)
