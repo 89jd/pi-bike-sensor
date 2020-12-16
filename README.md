@@ -3,7 +3,7 @@
 ## What I used to do this
 
 * Raspberry Pi (I used zero W)
-* A connection to a reed switch on your bike
+* A connection to a reed switch on your bike. Mine is the cheap Ultrasport brand (F-Bike)
   * Mine has a 3.5mm jack. I chopped up a spare usb to line in cable I had, and trimmed the wires
 * A 1k resistor
 * Jumper cables / some wires to connect the Pi to the sensor
