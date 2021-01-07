@@ -1,20 +1,22 @@
-import RPi.GPIO as GPIO
-from time import sleep, time
-from collections import deque
-from statistics import mean
+try: 
+    import RPi.GPIO as GPIO
+    GPIO.setmode(GPIO.BCM)
+except:
+    pass
+from time import sleep
 from typing import Callable
-from config import properties
 
 from utils import current_millis, increase_test_millis_by, print_debug
 
-GPIO.setmode(GPIO.BCM)
-
 class BikeSensor():
-    pin = properties.revolution_sensor.pin
+    def __init__(self, idle_time: int, pin: int, debug_sensor: bool = False) -> None:
+        try: 
+            GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        except:
+            pass
 
-    def __init__(self, idle_time=properties.revolution_sensor.idle_time) -> None:
-        GPIO.setup(BikeSensor.pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
+        self.debug_sensor = debug_sensor
+        self.pin = pin
         self.idle_time = idle_time
         self.previous_handled_time = None
         self.paused = False
@@ -66,19 +68,19 @@ class BikeSensor():
 
         return handled_state
 
-    def start(self, debug = False):
+    def start(self):
         if self.recording:
             return
         print_debug("Start recording bike sensor")
 
         self.recording = True
 
-        if not debug:
+        if not self.debug_sensor:
             if not self.previous_handled_time:
                 self.previous_handled_time = current_millis()
                 
             while self.recording:
-                if not self._handle_new_state(GPIO.input(BikeSensor.pin)):
+                if not self._handle_new_state(GPIO.input(self.pin)):
                     if current_millis() - self.previous_handled_time > self.idle_time:
                         if self.on_idle and not self.is_idle:
                             print_debug('idle')
